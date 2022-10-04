@@ -7,26 +7,22 @@
 <body>
 <script src="dist/main.js"></script>
 <script async defer>
-    function appendData(forecast) {
-        let hourlyContainer = document.getElementById("hourlyForecast");
-        for (let i = 0; i < forecast.length; i++) {
-            let div = document.createElement("div");
-            div.innerHTML = forecast[i].toString();
-            hourlyContainer.appendChild(div);
-        }
 
-    }
     window.onload = function () {
         WeatherService.getWeatherForecastFetch("Horsens").then(forecast => {
-            appendData(forecast.forecast);
+            WeatherService.appendForecast(forecast.forecast);
         });
 
-        WeatherService.minimumTemperatureForLastDay("Horsens");
-
+        WeatherService.lastDayDataXML("Horsens", data => {
+            WeatherService.appendLastDay(data)
+        });
     }
 </script>
 <h1>Weather for Horsens</h1>
 <a href="index.html">Back to index</a>
+
+<h2>Last day</h2>
+<div id="lastDay"></div><br> <hr>
 <h2>Hourly forecast</h2>
 <div id="hourlyForecast"></div>
 

@@ -1,7 +1,7 @@
 ﻿const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-let htmlPageNames = ['aarhus', 'copenhagen', 'horsens'];
+let htmlPageNames = ['aarhus', 'copenhagen', 'horsens', 'sendweather'];
 let multipleHtmlPlugins = htmlPageNames.map(name => {
     return new HtmlWebpackPlugin({
         template: `./static/${name}.html`,

@@ -1,16 +1,15 @@
 ﻿import HistoricalDataList, {Forecast, HistoricalData} from "./weathermodel.js";
 
-async function getWeatherDataXML() {
+async function getWeatherDataXML(callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8080/data');
-    let data = xhr.onload = () => {
-        const jsonData = JSON.parse(xhr.responseText);
-        let histData = new HistoricalDataList(jsonData);
-        console.log(histData.toString())
-        return histData;
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            callback(new HistoricalDataList(data));
+        }
     }
     xhr.send();
-    return data;
 }
 
 function getWeatherDataFetch() {
@@ -35,16 +34,40 @@ function findYesterday() {
     return dayBefore;
 }
 
-function minimumTemperatureForLastDay(city){
-    getWeatherDataFetch().then(data => {
+async function lastDayDataXML(city, callback) {
+    await getWeatherDataXML(data => {
         let yesterday = findYesterday();
         let yest = data.filter(d => {
-            d.filter(x => {
-                x.place === city && new Date(x.time) === yesterday
-            })
+            return d[0].place === city && new Date(d[0].time).getDate() === yesterday.getDate()
         })
-        console.log(yest.toString())
-        console.log("Minimum temperature for " + city + " yesterday was " + minTemp);
+        let minTemp = Math.min(...yest.map(d => d[0].value))
+        let maxTemp = Math.max(...yest.map(d => d[0].value))
+        let sumOfPrecipitation = yest.reduce((a, b) => a + b[1].value, 0)
+        let avgWindSpeed = yest.reduce((a, b) => a + b[2].value, 0) / yest.length
+
+        function toString() {
+            return "Min temp: " + minTemp + " Max temp: " + maxTemp + " <br>Sum of precipitation: " + sumOfPrecipitation + " <br>Avg wind speed: " + avgWindSpeed
+        }
+
+        callback({minTemp, maxTemp, sumOfPrecipitation, avgWindSpeed, toString})
     })
 }
-export {getWeatherDataXML, getWeatherDataFetch, getWeatherForecastFetch, minimumTemperatureForLastDay}
+
+function appendForecast(forecast) {
+    let container = document.getElementById("hourlyForecast");
+    for (const element of forecast) {
+        let div = document.createElement("div");
+        div.innerHTML = element.toString();
+        container.appendChild(div);
+    }
+}
+
+function appendLastDay(data){
+    let container = document.getElementById("lastDay");
+    let div = document.createElement("div");
+    div.innerHTML = data;
+    container.appendChild(div);
+
+}
+
+export {getWeatherDataXML, getWeatherDataFetch, getWeatherForecastFetch, lastDayDataXML, appendForecast, appendLastDay}
