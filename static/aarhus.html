@@ -14,15 +14,24 @@
         });
 
         WeatherService.lastDayDataXML("Aarhus", data => {
-            WeatherService.appendLastDay(data)
+            WeatherService.appendSingleData(data, "lastDay");
         });
+
+        WeatherService.latestMeasurement("Aarhus", data => {
+            WeatherService.appendSingleData(data.max, "latestMeasurement");
+        })
     }
 </script>
 <h1>Weather for Aarhus</h1>
 <a href="index.html">Back to index</a>
 
+
+<h2>Latest measurement</h2>
+<div id="latestMeasurement"></div><br> <hr>
+
 <h2>Last day</h2>
 <div id="lastDay"></div><br> <hr>
+
 <h2>Hourly forecast</h2>
 <div id="hourlyForecast"></div>
 

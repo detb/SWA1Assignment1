@@ -27,6 +27,13 @@ async function getWeatherForecastFetch(city) {
         .catch(console.error)
 }
 
+async function postWeatherData(data){
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:8080/data", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(data));
+}
+
 function findYesterday() {
     const date = new Date()
     const dayBefore = new Date(date.getTime());
@@ -53,6 +60,15 @@ async function lastDayDataXML(city, callback) {
     })
 }
 
+async function latestMeasurement(city, callback) {
+    await getWeatherDataXML(data => {
+        let max = data.reduce((a, b) => {
+            return new Date(a[0].time) > new Date(b[0].time) ? a : b;
+        });
+        callback({max})
+    })
+}
+
 function appendForecast(forecast) {
     let container = document.getElementById("hourlyForecast");
     for (const element of forecast) {
@@ -62,12 +78,11 @@ function appendForecast(forecast) {
     }
 }
 
-function appendLastDay(data){
-    let container = document.getElementById("lastDay");
+function appendSingleData(data, id){
+    let container = document.getElementById(id);
     let div = document.createElement("div");
     div.innerHTML = data;
     container.appendChild(div);
-
 }
 
-export {getWeatherDataXML, getWeatherDataFetch, getWeatherForecastFetch, lastDayDataXML, appendForecast, appendLastDay}
+export {getWeatherDataXML, getWeatherDataFetch, getWeatherForecastFetch, lastDayDataXML, appendForecast, appendSingleData, latestMeasurement, postWeatherData}

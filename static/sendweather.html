@@ -5,7 +5,15 @@
     <title>Title</title>
 </head>
 <body>
+<script src="dist/main.js"></script>
+<script async defer>
+    WeatherService.postWeatherData();
+</script>
 <h1>Send some weather data</h1>
 <a href="index.html">Back to index</a>
+<br>
+<p>Please input weather data as json</p>
+<input style="width: 80%;" type="text" id="jsontext">
+<input name="submit" type="submit" onclick='WeatherService.postWeatherData(document.getElementById("jsontext").value)'>
 </body>
 </html>
