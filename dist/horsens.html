@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Horsens</title>
+<script defer src="main.js"></script></head>
+<body>
+<script src="dist/main.js"></script>
+<script async defer>
+    function appendData(forecast) {
+        let hourlyContainer = document.getElementById("hourlyForecast");
+        for (let i = 0; i < forecast.length; i++) {
+            let div = document.createElement("div");
+            div.innerHTML = 'for: ' + forecast[i].temperature + ' ' + forecast[i].precipitation;
+            hourlyContainer.appendChild(div);
+        }
+
+    }
+    window.onload = function () {
+        WeatherService.getWeatherForecastFetch("Horsens").then(forecast => {
+            appendData(forecast);
+        });
+
+    }
+</script>
+<h1>Weather for Horsens</h1>
+<a href="index.html">Back to index</a>
+<h2>Hourly forecast</h2>
+<div id="hourlyForecast"></div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Horsens</title>
+</head>
+<body>
+<script src="dist/main.js"></script>
+<script async defer>
+    function appendData(forecast) {
+        let hourlyContainer = document.getElementById("hourlyForecast");
+        for (let i = 0; i < forecast.length; i++) {
+            let div = document.createElement("div");
+            div.innerHTML = forecast[i].toString();
+            hourlyContainer.appendChild(div);
+        }
+
+    }
+    window.onload = function () {
+        WeatherService.getWeatherForecastFetch("Horsens").then(forecast => {
+            appendData(forecast.forecast);
+        });
+
+        WeatherService.minimumTemperatureForLastDay("Horsens");
+
+    }
+</script>
+<h1>Weather for Horsens</h1>
+<a href="index.html">Back to index</a>
+<h2>Hourly forecast</h2>
+<div id="hourlyForecast"></div>
+
+<br> <hr>
+<h2>Latest measurement</h2>
+
+</body>
+</html>
