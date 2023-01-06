@@ -1,5 +1,6 @@
 ﻿import HistoricalDataList, {Forecast, HistoricalData} from "./weathermodel.js";
 
+// Q5 Q6
 async function getWeatherDataXML(callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8080/data');
@@ -60,6 +61,7 @@ async function lastDayDataXML(city, callback) {
     })
 }
 
+// Q5
 async function latestMeasurement(city, callback) {
     await getWeatherDataXML(data => {
         let max = data.reduce((a, b) => {

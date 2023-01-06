@@ -1,4 +1,5 @@
-﻿function ForecastCommon(time, place, from, to, unit){
+﻿// Q1
+function ForecastCommon(time, place, from, to, unit){
     function toString(){
         return "time: " + time.substring(11,19) + ", place: " + place + ", from: " + from + ", to: " + to + ", unit: " + unit;
     }
@@ -83,7 +84,7 @@ function HistoricalData(data){
     }
 }
 
-
+// Q2
 function Temperature(type, time, place, from, to, unit) {
     let common = ForecastCommon(time, place, from, to, unit);
     
